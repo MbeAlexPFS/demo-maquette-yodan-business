@@ -561,6 +561,7 @@ function setView(view) { state.view = view; state.keys = null; stopTimers(); ren
 
 function render() {
   $$("#role-switch button").forEach((b) => b.classList.toggle("active", b.dataset.role === state.role));
+  $("#role-select").value = state.role;
   $$(".device-switch button").forEach((b) => b.classList.toggle("on", b.dataset.device === state.device));
   const stage = $("#stage");
   // Charte : espaces Yodan en bleu YODAN ; espaces partenaires à la couleur du partenaire.
@@ -582,14 +583,26 @@ function renderNotes() {
   const key = state.view ? `${state.role}:${state.view}` : state.role;
   const n = NOTES[key] || NOTES[state.role];
   const aside = $("#notes");
-  if (!n) { aside.innerHTML = "<p class='muted'>Pas de note pour cet écran.</p>"; return; }
-  aside.innerHTML = `
+  const close = `<button type="button" class="notes-close" aria-label="Fermer les notes">×</button>`;
+  if (!n) { aside.innerHTML = `${close}<p class='muted'>Pas de note pour cet écran.</p>`; } else {
+  aside.innerHTML = `${close}
     <h2>${esc(n.title)}</h2>
     <span class="tag">Aujourd'hui</span><ul class="before">${n.before.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
     <span class="tag">Proposition</span><ul class="after">${n.after.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>
     ${n.clicks ? `<span class="tag">Clics (hors saisie)</span>
       <div class="clicks"><div class="b"><strong>${n.clicks.before}</strong>avant</div><div class="a"><strong>${n.clicks.after}</strong>après</div></div>
       <p class="task">${esc(n.clicks.task)}</p>` : ""}`;
+  }
+  $(".notes-close", aside).addEventListener("click", () => setNotes(false));
+}
+/** Affiche ou masque les notes : panneau à droite sur PC, fenêtre par-dessus l'écran sur téléphone. */
+function setNotes(on) {
+  state.notes = on;
+  $("#notes-toggle").setAttribute("aria-pressed", String(on));
+  $("#layout").classList.toggle("with-notes", on);
+  $("#notes").hidden = !on;
+  document.body.classList.toggle("notes-open", on);
+  if (on && matchMedia("(max-width: 760px)").matches) $("#notes .notes-close")?.focus();
 }
 document.addEventListener("keydown", (e) => {
   if (!state.keys) return;
@@ -2604,6 +2617,18 @@ RENDER.patient = (root) => {
  * Démarrage
  * ===================================================================== */
 $("#role-switch").innerHTML = ROLES.map((r) => `<button type="button" data-role="${r.id}">${r.label}</button>`).join("");
+// Téléphone : mêmes profils dans une liste déroulante (une seule ligne de barre).
+$("#role-select").innerHTML = ROLES.map((r) => `<option value="${r.id}">${r.label}</option>`).join("");
+$("#role-select").addEventListener("change", (e) => go(e.target.value));
+// La barre peut changer de hauteur (passage à la ligne) : on la mesure pour placer le reste dessous.
+const syncBarHeight = () => document.documentElement.style.setProperty("--bar-h", `${$(".mock-bar").offsetHeight}px`);
+new ResizeObserver(syncBarHeight).observe($(".mock-bar"));
+syncBarHeight();
+// Petit écran : vue mobile et notes repliées par défaut, pour laisser toute la place à l'interface.
+if (matchMedia("(max-width: 760px)").matches) {
+  state.device = "mobile";
+  setNotes(false);
+}
 $$("#role-switch button").forEach((b) => b.addEventListener("click", () => go(b.dataset.role)));
 $$(".device-switch button").forEach((b) => b.addEventListener("click", () => {
   state.device = b.dataset.device;
@@ -2611,10 +2636,9 @@ $$(".device-switch button").forEach((b) => b.addEventListener("click", () => {
   $$(".drawer-back").forEach((d) => d.remove());
   render();
 }));
-$("#notes-toggle").addEventListener("click", (e) => {
-  state.notes = !state.notes;
-  e.currentTarget.setAttribute("aria-pressed", state.notes);
-  $("#layout").classList.toggle("with-notes", state.notes);
-  $("#notes").hidden = !state.notes;
-});
+$("#notes-toggle").addEventListener("click", () => setNotes(!state.notes));
+// Fond assombri de la fenêtre des notes (téléphone) : un toucher dessus ou Échap la ferme.
+document.body.append(h(`<div class="notes-backdrop" id="notes-backdrop"></div>`));
+$("#notes-backdrop").addEventListener("click", () => setNotes(false));
+document.addEventListener("keydown", (e) => { if (e.key === "Escape" && state.notes && matchMedia("(max-width: 760px)").matches) setNotes(false); });
 go("synthese");
