@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Maquette UX YODAN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+  <header class="mock-bar">
+    <div class="mock-title">Maquette YODAN<span>refonte UX — données fictives</span></div>
+    <nav class="role-switch" id="role-switch" aria-label="Choisir un profil"></nav>
+    <div class="device-switch" role="group" aria-label="Affichage">
+      <button type="button" data-device="pc" class="on">🖥 PC</button>
+      <button type="button" data-device="mobile">📱 Mobile</button>
+    </div>
+    <button type="button" class="notes-toggle" id="notes-toggle" aria-pressed="true">Notes UX</button>
+  </header>
+  <div class="layout with-notes" id="layout">
+    <main id="stage"></main>
+    <aside class="notes" id="notes" aria-label="Notes UX de l'écran"></aside>
+  </div>
+  <div id="toast" aria-live="polite"></div>
+  <script src="app.js?v=4"></script>
+</body>
+</html>
