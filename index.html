@@ -3,28 +3,126 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maquette UX YODAN</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Exo+2:wght@400;500;600;700;800&display=swap">
-  <link rel="stylesheet" href="styles.css?v=7">
+  <title>Maquette — Graphes admin ATMP CNPS</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="mock-bar">
-    <div class="mock-title">Maquette YODAN<span>refonte UX — données fictives</span></div>
-    <nav class="role-switch" id="role-switch" aria-label="Choisir un profil"></nav>
-    <select class="role-select" id="role-select" aria-label="Choisir un profil"></select>
+    <div class="mock-title">Maquette ATMP CNPS<span>graphes de l'administration — données fictives</span></div>
     <div class="device-switch" role="group" aria-label="Affichage">
-      <button type="button" data-device="pc" class="on" aria-label="Affichage PC">🖥<span class="lbl"> PC</span></button>
-      <button type="button" data-device="mobile" aria-label="Affichage mobile">📱<span class="lbl"> Mobile</span></button>
+      <button type="button" data-device="pc" class="on" aria-pressed="true">🖥 PC</button>
+      <button type="button" data-device="mobile" aria-pressed="false">📱 Mobile</button>
     </div>
     <button type="button" class="notes-toggle" id="notes-toggle" aria-pressed="true">Notes UX</button>
   </header>
+
   <div class="layout with-notes" id="layout">
-    <main id="stage"></main>
-    <aside class="notes" id="notes" aria-label="Notes UX de l'écran"></aside>
+    <main id="stage">
+      <div class="app" id="app">
+        <div class="app-head">
+          <div>
+            <p class="eyebrow">Super admin</p>
+            <h1>Tableau de bord</h1>
+          </div>
+          <span class="badge">Données fictives</span>
+        </div>
+
+        <div class="kpi-grid">
+          <!-- Histogramme -->
+          <section class="card kpi-card" id="decision-curve-card" aria-labelledby="curve-title">
+            <div class="kpi-head">
+              <h3 id="curve-title">À prendre en charge · évolution</h3>
+              <div class="kpi-tools">
+                <div class="kpi-segmented kpi-unit" role="group" aria-label="Unité des colonnes">
+                  <button type="button" data-kpi-unit="count" aria-pressed="true" title="Nombre d'évaluations">Nombre</button>
+                  <button type="button" data-kpi-unit="pct" aria-pressed="false" title="Part de chaque décision (100 % par colonne)">%</button>
+                </div>
+                <div class="kpi-segmented" role="group" aria-label="Granularité">
+                  <button type="button" data-kpi-mode="week">Semaine</button>
+                  <button type="button" data-kpi-mode="month">Mois</button>
+                  <button type="button" data-kpi-mode="year">Année</button>
+                </div>
+              </div>
+            </div>
+            <div class="kpi-nav">
+              <button type="button" data-kpi-prev aria-label="Période précédente">‹</button>
+              <strong data-kpi-title></strong>
+              <button type="button" data-kpi-next aria-label="Période suivante">›</button>
+            </div>
+            <div class="center"><button type="button" class="btn-ghost kpi-up" data-kpi-up hidden></button></div>
+            <div class="kpi-chart" id="decision-curve"></div>
+            <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
+          </section>
+
+          <div class="kpi-side">
+            <section class="card kpi-card" aria-labelledby="zone-title">
+              <div class="kpi-head">
+                <h3 id="zone-title">Évaluations par zone</h3>
+                <div class="kpi-period">
+                  <label for="zone-start">Du</label><input type="date" id="zone-start" value="2026-01-01">
+                  <label for="zone-end">au</label><input type="date" id="zone-end" value="2026-11-13">
+                </div>
+              </div>
+              <div class="kpi-chart" id="zone-pie"></div>
+              <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
+            </section>
+            <section class="card kpi-card" aria-labelledby="decision-title">
+              <div class="kpi-head">
+                <h3 id="decision-title">À prendre en charge</h3>
+                <div class="kpi-period">
+                  <label for="decision-start">Du</label><input type="date" id="decision-start" value="2026-01-01">
+                  <label for="decision-end">au</label><input type="date" id="decision-end" value="2026-11-13">
+                </div>
+              </div>
+              <div class="kpi-chart" id="decision-pie"></div>
+              <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <aside class="notes" id="notes" aria-label="Notes UX">
+      <h2>Notes UX — Graphes admin</h2>
+      <p class="muted small">Écran concerné : partial <code>kpi-charts</code> / <code>kpi-cards</code>, utilisé par le super admin et le tableau de bord admin (superviseur).</p>
+
+      <span class="tag">Histogramme</span>
+      <ul class="after">
+        <li>Sélecteur <b>Nombre / %</b> à côté de Semaine / Mois / Année. <b>Nombre</b> par défaut.</li>
+        <li><b>Nombre</b> : colonnes empilées, axe gradué automatiquement, total au-dessus de chaque colonne.</li>
+        <li><b>%</b> : chaque colonne = 100 %, axe 0–100 %.</li>
+        <li>Infobulle : nombre et % dans les deux modes.</li>
+        <li>Choix non mémorisé : retour à Nombre à chaque chargement de page ; conservé pendant la navigation semaine ↔ mois ↔ année.</li>
+        <li>Texte explicatif sous le graphe supprimé ; titre fixe.</li>
+      </ul>
+
+      <span class="tag">Camemberts</span>
+      <ul class="after">
+        <li>Valeurs <b>uniquement dans la légende</b> : rien d'écrit dans les parts (évite les chiffres illisibles sur les petites parts).</li>
+        <li>Le <b>%</b> apparaît au survol d'une part ou d'une ligne de légende ; la part se détache légèrement.</li>
+        <li>Clavier : <kbd>Tab</kbd> sur chaque part. Mobile : un appui sur la part.</li>
+        <li>Total concis sous le camembert : « Total 855 ».</li>
+      </ul>
+
+      <span class="tag">Inchangé</span>
+      <ul>
+        <li>Navigation année → mois → semaine par clic sur une colonne.</li>
+        <li>Export CSV : nombre <b>et</b> %, quel que soit l'affichage.</li>
+        <li>« Voir les données » : tableau replié, conservé pour l'accessibilité (lecture sans couleur, lecteurs d'écran).</li>
+      </ul>
+
+      <span class="tag">Décisions validées</span>
+      <ol class="questions">
+        <li>Unité par défaut : Nombre.</li>
+        <li>Pas de mémorisation du choix.</li>
+        <li>Colonnes empilées en mode Nombre.</li>
+        <li>Valeurs des camemberts dans la légende seulement.</li>
+        <li>Total sous le camembert : oui, concis ; textes inutiles retirés.</li>
+      </ol>
+      <p class="muted small">Données agrégées uniquement, aucune donnée individuelle : pas de changement de périmètre d'accès.</p>
+    </aside>
   </div>
-  <div id="toast" aria-live="polite"></div>
-  <script src="app.js?v=7"></script>
+
+  <script src="app.js"></script>
 </body>
 </html>
