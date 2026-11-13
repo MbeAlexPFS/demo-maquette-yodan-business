@@ -7,7 +7,7 @@
   // Résultats fictifs par zone (textes repris de config/healingy_test.php)
   var ZONES = {
     green: {
-      key: 'low', score: 2, color: '#ca8a04', soft: '#fefce8', emoji: '🙂',
+      key: 'low', score: 2, color: '#16a34a', soft: '#ecfdf3', emoji: '🙂',
       title: 'À faible risque',
       msg: 'Votre score indique un faible risque. Restez attentif à vos habitudes de jeu et fixez-vous des limites claires.'
     },
@@ -23,7 +23,7 @@
     }
   };
 
-  var state = { zone: 'red', device: 'pc', phoneKnown: false };
+  var state = { zone: 'red', device: 'pc' };
 
   var $ = function (id) { return document.getElementById(id); };
   var site = $('site'), frame = $('frame'), stage = $('stage');
@@ -84,24 +84,12 @@
     $('follow').hidden = state.zone === 'green';
     $('support-row').hidden = state.zone !== 'red';
 
-    $('call-hint').textContent = state.phoneKnown
-      ? 'Appel gratuit et confidentiel, au 07 •• •• •• 12.'
-      : 'Appel gratuit et confidentiel, au numéro de votre choix.';
-    syncPhone();
-
     frame.className = 'frame ' + state.device;
     $('frame-caption').textContent = state.device === 'pc'
       ? 'Écran PC 1366 × 768 (zone visible ≈ 1366 × 640 après la barre du navigateur) — aucun défilement attendu'
       : 'Mobile 390 px — version responsive de la même interface';
 
     fitFrame();
-    requestAnimationFrame(checkFit);
-  }
-
-  function syncPhone() {
-    var show = $('cb-call').checked && !state.phoneKnown;
-    $('phone-wrap').hidden = !show;
-    if (!show) $('phone-err').hidden = true;
     requestAnimationFrame(checkFit);
   }
 
@@ -121,7 +109,6 @@
       render();
     });
   });
-  $('phone-known').addEventListener('change', function (e) { state.phoneKnown = e.target.checked; render(); });
   $('notes-toggle').addEventListener('click', function () {
     var on = $('layout').classList.toggle('with-notes');
     this.setAttribute('aria-pressed', String(on));
@@ -129,18 +116,10 @@
   });
 
   // ----- Formulaire (simulation, rien n'est envoyé) -----
-  $('cb-call').addEventListener('change', syncPhone);
   $('follow-form').addEventListener('submit', function (e) {
     e.preventDefault();
     var call = $('cb-call').checked;
     var support = $('cb-support').checked && state.zone === 'red';
-    if (call && !state.phoneKnown && !/^\+?[0-9\s]{8,20}$/.test($('phone').value.trim())) {
-      $('phone-err').hidden = false;
-      $('phone').focus();
-      requestAnimationFrame(checkFit);
-      return;
-    }
-    $('phone-err').hidden = true;
     var msg = 'Merci, votre choix a bien été enregistré.';
     if (call || support) msg += ' Nous vous contacterons dans les meilleurs délais.';
     $('saved').textContent = msg;

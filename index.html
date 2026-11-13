@@ -22,7 +22,6 @@
       </div>
     </div>
 
-    <label class="mock-check"><input type="checkbox" id="phone-known"> Numéro déjà connu</label>
 
     <div class="seg" role="group" aria-label="Affichage">
       <button type="button" data-device="pc" aria-pressed="true">🖥 PC</button>
@@ -68,7 +67,6 @@
               </div>
 
               <p class="result-msg" id="result-msg"></p>
-              <p class="thanks">Merci d'avoir passé le test (joueur.demo@exemple.test).</p>
 
               <a href="#" class="btn-ghost">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
@@ -87,15 +85,10 @@
                   <label class="check">
                     <input type="checkbox" id="cb-call">
                     <span>
-                      <b>Je souhaite qu'un conseiller m'appelle</b>
-                      <small id="call-hint">Appel gratuit et confidentiel, au numéro de votre choix.</small>
+                      <b>J'accepte d'être rappelé(e)</b>
+                      <small>Appel gratuit et confidentiel, au <span class="ph" title="Numéro saisi en début de test (fictif)">07 00 00 00 00</span>.</small>
                     </span>
                   </label>
-                  <div class="phone" id="phone-wrap" hidden>
-                    <label for="phone">Votre numéro de téléphone <span class="req">*</span></label>
-                    <input type="tel" id="phone" placeholder="Ex : 07 00 00 00 00" autocomplete="off">
-                    <p class="err" id="phone-err" hidden>Merci d'indiquer un numéro valide (8 à 20 chiffres).</p>
-                  </div>
 
                   <label class="check" id="support-row">
                     <input type="checkbox" id="cb-support">
@@ -154,7 +147,7 @@
 
     <aside class="notes" id="notes" aria-label="Notes UX">
       <h2>Notes UX — page résultat</h2>
-      <p class="muted small">Basée sur <code>resources/views/test-result.blade.php</code>. Utilisez les sélecteurs « Zone » et « Numéro déjà connu » pour voir tous les cas.</p>
+      <p class="muted small">Basée sur <code>resources/views/test-result.blade.php</code>. Utilisez le sélecteur « Zone » pour voir tous les cas.</p>
 
       <span class="tag">Changements demandés</span>
       <ul class="after">
@@ -162,7 +155,7 @@
         <li><b>Cases à cocher d'abord</b> (« Être accompagné(e) »), <b>liens ensuite</b> (WhatsApp, 9999).</li>
         <li>Titre des liens : « Besoin d'en parler ? » → <b>« En savoir plus sur le jeu responsable »</b>.</li>
         <li>Description WhatsApp : <b>« Inscrivez-vous à la chaîne WhatsApp »</b>.</li>
-        <li>Case appel reformulée : <b>« Je souhaite qu'un conseiller m'appelle »</b> + « Appel gratuit et confidentiel, au numéro de votre choix » (ou « au 07 •• •• •• 12 » si le numéro est connu).</li>
+        <li>Case appel reformulée : <b>« J'accepte d'être rappelé(e) »</b> + « Appel gratuit et confidentiel, au <i>[numéro saisi en début de test]</i> ». Rien n'est saisi sur la page résultat. Sans téléphone, on affiche l'e-mail de la même façon : « Nous vous contacterons par e-mail, à <i>[e-mail saisi en début de test]</i> ».</li>
         <li><b>Tout tient sur un écran PC</b> (1366 × 768) : 2 colonnes — résultat à gauche, action + liens à droite. Le pied de page reste visible.</li>
       </ul>
 
@@ -170,7 +163,7 @@
       <ul>
         <li>Jauge réduite (180 → 120 px) et placée <b>à côté</b> du titre au lieu d'au-dessus.</li>
         <li>Liens en tuiles horizontales compactes (icône à gauche) au lieu de grandes cartes verticales.</li>
-        <li>Champ téléphone affiché <b>dans</b> la carte, seulement si la case appel est cochée.</li>
+        <li>Plus aucun champ à remplir sur la page résultat : le numéro vient du début du test.</li>
         <li>Pied de page sur une seule ligne, marge haute supprimée.</li>
       </ul>
 
@@ -181,12 +174,17 @@
 
       <span class="tag">Questions à valider</span>
       <ol class="questions">
-        <li>Libellé de la case appel : « Je souhaite qu'un conseiller m'appelle » ? Autres options : « Être rappelé(e) gratuitement par un conseiller » / « Je veux parler à un conseiller par téléphone ».</li>
         <li>Le lien du pied de page : sur <b>toutes les pages</b> (layout commun) ou seulement sur la page résultat ?</li>
         <li>Libellé du lien de pied de page : « Plus d'informations sur le jeu responsable » vous convient ?</li>
-        <li>L'e-mail affiché dans « Merci d'avoir passé le test (…) » : on le garde ? Le retirer allège l'écran et évite d'afficher une donnée personnelle à côté d'un résultat sensible.</li>
+        <li>Zone verte affichée en vert : le site actuel affiche « À faible risque » en jaune (<code>#eab308</code>). On aligne la page réelle sur le vert ?</li>
       </ol>
-      <p class="muted small">Pas de nouvelle donnée collectée ni de nouveau service tiers : mêmes champs (rappel, accord, téléphone) qu'aujourd'hui.</p>
+      <span class="tag">Décisions validées</span>
+      <ul class="after">
+        <li>Libellé de la case appel : « J'accepte d'être rappelé(e) ».</li>
+        <li>Phrase « Merci d'avoir passé le test (…) » retirée (plus d'e-mail affiché).</li>
+        <li>Zone verte : couleur verte.</li>
+      </ul>
+      <p class="muted small">Pas de nouvelle donnée collectée ni de nouveau service tiers. Au contraire, la page résultat ne collecte plus de téléphone (moins de données saisies, minimisation).</p>
     </aside>
   </div>
 
