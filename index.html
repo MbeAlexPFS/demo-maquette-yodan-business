@@ -3,14 +3,29 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Maquette — Graphes admin ATMP CNPS</title>
+  <title>Maquette — Page résultat Lonaci</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="mock-bar">
-    <div class="mock-title">Maquette ATMP CNPS<span>graphes de l'administration — données fictives</span></div>
-    <div class="device-switch" role="group" aria-label="Affichage">
-      <button type="button" data-device="pc" class="on" aria-pressed="true">🖥 PC</button>
+    <div class="mock-title">Maquette Lonaci — page résultat<span>Maquette — données fictives</span></div>
+
+    <div class="mock-group" role="group" aria-label="Zone du résultat">
+      <span class="mock-label">Zone</span>
+      <div class="seg">
+        <button type="button" data-zone="green" aria-pressed="false">Verte</button>
+        <button type="button" data-zone="orange" aria-pressed="false">Orange</button>
+        <button type="button" data-zone="red" aria-pressed="true">Rouge</button>
+      </div>
+    </div>
+
+    <label class="mock-check"><input type="checkbox" id="phone-known"> Numéro déjà connu</label>
+
+    <div class="seg" role="group" aria-label="Affichage">
+      <button type="button" data-device="pc" aria-pressed="true">🖥 PC</button>
       <button type="button" data-device="mobile" aria-pressed="false">📱 Mobile</button>
     </div>
     <button type="button" class="notes-toggle" id="notes-toggle" aria-pressed="true">Notes UX</button>
@@ -18,108 +33,160 @@
 
   <div class="layout with-notes" id="layout">
     <main id="stage">
-      <div class="app" id="app">
-        <div class="app-head">
-          <div>
-            <p class="eyebrow">Super admin</p>
-            <h1>Tableau de bord</h1>
-          </div>
-          <span class="badge">Données fictives</span>
-        </div>
+      <p class="frame-caption" id="frame-caption">Écran PC 1366 × 768 (zone visible ≈ 1366 × 640 après la barre du navigateur) — aucun défilement attendu</p>
 
-        <div class="kpi-grid">
-          <!-- Histogramme -->
-          <section class="card kpi-card" id="decision-curve-card" aria-labelledby="curve-title">
-            <div class="kpi-head">
-              <h3 id="curve-title">À prendre en charge · évolution</h3>
-              <div class="kpi-tools">
-                <div class="kpi-segmented kpi-unit" role="group" aria-label="Unité des colonnes">
-                  <button type="button" data-kpi-unit="count" aria-pressed="true" title="Nombre d'évaluations">Nombre</button>
-                  <button type="button" data-kpi-unit="pct" aria-pressed="false" title="Part de chaque décision (100 % par colonne)">%</button>
-                </div>
-                <div class="kpi-segmented" role="group" aria-label="Granularité">
-                  <button type="button" data-kpi-mode="week">Semaine</button>
-                  <button type="button" data-kpi-mode="month">Mois</button>
-                  <button type="button" data-kpi-mode="year">Année</button>
-                </div>
-              </div>
-            </div>
-            <div class="kpi-nav">
-              <button type="button" data-kpi-prev aria-label="Période précédente">‹</button>
-              <strong data-kpi-title></strong>
-              <button type="button" data-kpi-next aria-label="Période suivante">›</button>
-            </div>
-            <div class="center"><button type="button" class="btn-ghost kpi-up" data-kpi-up hidden></button></div>
-            <div class="kpi-chart" id="decision-curve"></div>
-            <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
-          </section>
+      <div class="frame pc" id="frame">
+        <div class="site" id="site">
+          <!-- En-tête du site (inchangé) -->
+          <header class="site-head">
+            <img src="logo.jpg" alt="Jouons responsable" class="site-logo">
+            <nav class="site-nav" aria-label="Navigation principale">
+              <a href="#" class="on">Accueil</a>
+              <a href="#">Le test</a>
+            </nav>
+            <button type="button" class="site-burger" aria-label="Menu">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+          </header>
 
-          <div class="kpi-side">
-            <section class="card kpi-card" aria-labelledby="zone-title">
-              <div class="kpi-head">
-                <h3 id="zone-title">Évaluations par zone</h3>
-                <div class="kpi-period">
-                  <label for="zone-start">Du</label><input type="date" id="zone-start" value="2026-01-01">
-                  <label for="zone-end">au</label><input type="date" id="zone-end" value="2026-11-13">
+          <main class="result">
+            <!-- Colonne gauche : le résultat -->
+            <section class="card result-card" aria-labelledby="result-title">
+              <div class="result-top">
+                <div class="gauge" id="gauge" role="img" aria-label="">
+                  <div class="gauge-in">
+                    <span class="gauge-emoji" id="gauge-emoji"></span>
+                    <span class="gauge-pct" id="gauge-pct"></span>
+                  </div>
+                </div>
+                <div class="result-id">
+                  <p class="pill">Votre profil</p>
+                  <p class="result-cat">Catégorie ICJE</p>
+                  <h1 id="result-title" class="result-title"></h1>
+                  <p class="score"><b id="score"></b> <span>/ 27 points</span></p>
                 </div>
               </div>
-              <div class="kpi-chart" id="zone-pie"></div>
-              <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
+
+              <p class="result-msg" id="result-msg"></p>
+              <p class="thanks">Merci d'avoir passé le test (joueur.demo@exemple.test).</p>
+
+              <a href="#" class="btn-ghost">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Refaire le test
+              </a>
             </section>
-            <section class="card kpi-card" aria-labelledby="decision-title">
-              <div class="kpi-head">
-                <h3 id="decision-title">À prendre en charge</h3>
-                <div class="kpi-period">
-                  <label for="decision-start">Du</label><input type="date" id="decision-start" value="2026-01-01">
-                  <label for="decision-end">au</label><input type="date" id="decision-end" value="2026-11-13">
+
+            <!-- Colonne droite : action puis liens -->
+            <div class="side">
+              <!-- 1) Cases à cocher (zones orange et rouge) -->
+              <section class="card follow" id="follow" aria-labelledby="follow-title">
+                <h2 id="follow-title">Être accompagné(e)</h2>
+                <p class="sub">Vous n'êtes pas seul(e). Un professionnel peut vous contacter, en toute confidentialité.</p>
+
+                <form id="follow-form" novalidate>
+                  <label class="check">
+                    <input type="checkbox" id="cb-call">
+                    <span>
+                      <b>Je souhaite qu'un conseiller m'appelle</b>
+                      <small id="call-hint">Appel gratuit et confidentiel, au numéro de votre choix.</small>
+                    </span>
+                  </label>
+                  <div class="phone" id="phone-wrap" hidden>
+                    <label for="phone">Votre numéro de téléphone <span class="req">*</span></label>
+                    <input type="tel" id="phone" placeholder="Ex : 07 00 00 00 00" autocomplete="off">
+                    <p class="err" id="phone-err" hidden>Merci d'indiquer un numéro valide (8 à 20 chiffres).</p>
+                  </div>
+
+                  <label class="check" id="support-row">
+                    <input type="checkbox" id="cb-support">
+                    <span>
+                      <b>J'accepte d'être accompagné(e)</b>
+                      <small>J'accepte qu'un professionnel de l'accompagnement me contacte pour me proposer un suivi adapté.</small>
+                    </span>
+                  </label>
+
+                  <div class="actions">
+                    <button type="submit" class="btn-main" id="btn-save">Enregistrer mon choix</button>
+                    <p class="saved" id="saved" hidden role="status"></p>
+                  </div>
+                </form>
+              </section>
+
+              <!-- 2) Liens -->
+              <section class="links" aria-labelledby="links-title">
+                <h2 id="links-title">En savoir plus sur le jeu responsable</h2>
+                <div class="link-grid">
+                  <a href="#" class="tile wa" onclick="return false;">
+                    <span class="tile-ico">
+                      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.2.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.4-.3z"/></svg>
+                    </span>
+                    <span class="tile-txt">
+                      <b>Chaîne WhatsApp</b>
+                      <small>Inscrivez-vous à la chaîne WhatsApp</small>
+                    </span>
+                  </a>
+                  <a href="#" class="tile tel" onclick="return false;">
+                    <span class="tile-ico">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/></svg>
+                    </span>
+                    <span class="tile-txt">
+                      <b>Numéro vert <span class="num">9999</span></b>
+                      <small>Appel gratuit</small>
+                    </span>
+                  </a>
                 </div>
-              </div>
-              <div class="kpi-chart" id="decision-pie"></div>
-              <div class="right"><button type="button" class="btn-ghost">Exporter les données</button></div>
-            </section>
-          </div>
+              </section>
+            </div>
+          </main>
+
+          <!-- Pied de page : le lien « ressources » y est déplacé -->
+          <footer class="site-foot">
+            <span>© 2026 Jouons responsable · <i>Le jeu doit rester un plaisir</i></span>
+            <a href="#" class="foot-link" onclick="return false;">
+              Plus d'informations sur le jeu responsable
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></svg>
+            </a>
+          </footer>
         </div>
       </div>
+      <p class="fit" id="fit" role="status"></p>
     </main>
 
     <aside class="notes" id="notes" aria-label="Notes UX">
-      <h2>Notes UX — Graphes admin</h2>
-      <p class="muted small">Écran concerné : partial <code>kpi-charts</code> / <code>kpi-cards</code>, utilisé par le super admin et le tableau de bord admin (superviseur).</p>
+      <h2>Notes UX — page résultat</h2>
+      <p class="muted small">Basée sur <code>resources/views/test-result.blade.php</code>. Utilisez les sélecteurs « Zone » et « Numéro déjà connu » pour voir tous les cas.</p>
 
-      <span class="tag">Histogramme</span>
+      <span class="tag">Changements demandés</span>
       <ul class="after">
-        <li>Sélecteur <b>Nombre / %</b> à côté de Semaine / Mois / Année. <b>Nombre</b> par défaut.</li>
-        <li><b>Nombre</b> : colonnes empilées, axe gradué automatiquement, total au-dessus de chaque colonne.</li>
-        <li><b>%</b> : chaque colonne = 100 %, axe 0–100 %.</li>
-        <li>Infobulle : nombre et % dans les deux modes.</li>
-        <li>Choix non mémorisé : retour à Nombre à chaque chargement de page ; conservé pendant la navigation semaine ↔ mois ↔ année.</li>
-        <li>Texte explicatif sous le graphe supprimé ; titre fixe.</li>
+        <li>Bouton <b>« Ressources d'accompagnement »</b> retiré du résultat → lien <b>« Plus d'informations sur le jeu responsable »</b> dans le pied de page (même URL : <code>support.resources_url</code>).</li>
+        <li><b>Cases à cocher d'abord</b> (« Être accompagné(e) »), <b>liens ensuite</b> (WhatsApp, 9999).</li>
+        <li>Titre des liens : « Besoin d'en parler ? » → <b>« En savoir plus sur le jeu responsable »</b>.</li>
+        <li>Description WhatsApp : <b>« Inscrivez-vous à la chaîne WhatsApp »</b>.</li>
+        <li>Case appel reformulée : <b>« Je souhaite qu'un conseiller m'appelle »</b> + « Appel gratuit et confidentiel, au numéro de votre choix » (ou « au 07 •• •• •• 12 » si le numéro est connu).</li>
+        <li><b>Tout tient sur un écran PC</b> (1366 × 768) : 2 colonnes — résultat à gauche, action + liens à droite. Le pied de page reste visible.</li>
       </ul>
 
-      <span class="tag">Camemberts</span>
-      <ul class="after">
-        <li>Valeurs <b>uniquement dans la légende</b> : rien d'écrit dans les parts (évite les chiffres illisibles sur les petites parts).</li>
-        <li>Le <b>%</b> apparaît au survol d'une part ou d'une ligne de légende ; la part se détache légèrement.</li>
-        <li>Clavier : <kbd>Tab</kbd> sur chaque part. Mobile : un appui sur la part.</li>
-        <li>Total concis sous le camembert : « Total 855 ».</li>
-      </ul>
-
-      <span class="tag">Inchangé</span>
+      <span class="tag">Comment on gagne la hauteur</span>
       <ul>
-        <li>Navigation année → mois → semaine par clic sur une colonne.</li>
-        <li>Export CSV : nombre <b>et</b> %, quel que soit l'affichage.</li>
-        <li>« Voir les données » : tableau replié, conservé pour l'accessibilité (lecture sans couleur, lecteurs d'écran).</li>
+        <li>Jauge réduite (180 → 120 px) et placée <b>à côté</b> du titre au lieu d'au-dessus.</li>
+        <li>Liens en tuiles horizontales compactes (icône à gauche) au lieu de grandes cartes verticales.</li>
+        <li>Champ téléphone affiché <b>dans</b> la carte, seulement si la case appel est cochée.</li>
+        <li>Pied de page sur une seule ligne, marge haute supprimée.</li>
       </ul>
 
-      <span class="tag">Décisions validées</span>
+      <span class="tag">Mobile</span>
+      <ul>
+        <li>Même contenu, une seule colonne, dans l'ordre : résultat (+ refaire le test) → cases à cocher → liens → pied de page. Le défilement est normal sur mobile.</li>
+      </ul>
+
+      <span class="tag">Questions à valider</span>
       <ol class="questions">
-        <li>Unité par défaut : Nombre.</li>
-        <li>Pas de mémorisation du choix.</li>
-        <li>Colonnes empilées en mode Nombre.</li>
-        <li>Valeurs des camemberts dans la légende seulement.</li>
-        <li>Total sous le camembert : oui, concis ; textes inutiles retirés.</li>
+        <li>Libellé de la case appel : « Je souhaite qu'un conseiller m'appelle » ? Autres options : « Être rappelé(e) gratuitement par un conseiller » / « Je veux parler à un conseiller par téléphone ».</li>
+        <li>Le lien du pied de page : sur <b>toutes les pages</b> (layout commun) ou seulement sur la page résultat ?</li>
+        <li>Libellé du lien de pied de page : « Plus d'informations sur le jeu responsable » vous convient ?</li>
+        <li>L'e-mail affiché dans « Merci d'avoir passé le test (…) » : on le garde ? Le retirer allège l'écran et évite d'afficher une donnée personnelle à côté d'un résultat sensible.</li>
       </ol>
-      <p class="muted small">Données agrégées uniquement, aucune donnée individuelle : pas de changement de périmètre d'accès.</p>
+      <p class="muted small">Pas de nouvelle donnée collectée ni de nouveau service tiers : mêmes champs (rappel, accord, téléphone) qu'aujourd'hui.</p>
     </aside>
   </div>
 
